@@ -4,30 +4,50 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/kirstenlindsmith/.oh-my-zsh"
 
+export DEFAULT_USER="kirstenlindsmith"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"
-
-#   Opening Prompt
-#   ------------------------------------------------------------
-fortune | cowsay -f kitty | lolcat -p 1
-    # curl parrot.live
-    
-export DEFAULT_USER="kirstenlindsmith" 
-
-prompt_context() {}
-#   Set Paths
-#   ------------------------------------------------------------
-export PATH="$PATH:/usr/local/bin/"
-export PATH="/usr/local/git/bin:/sw/bin/:/usr/local/bin:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
-export PATH=/usr/local/bin:$PATH
-# Set list of themes to pick from when loading at random
+# ZSH_THEME="agnoster"
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+ZSH_THEME="powerlevel9k/powerlevel9k"
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=(2)
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+local user_symbol=" "
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%{%B%F{black}%K{green}%} $user_symbol%{%b%f%k%F{green}%} %{%f%}"
+
+prompt_context() {}
+#   Set Paths
+#   ------------------------------------------------------------
+    export PATH="$PATH:/usr/local/bin/"
+    export PATH="~/.rbenv/shims:/usr/local/bin:usr/local/git/bin:/sw/bin/:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+    export PATH="/usr/local/bin:$PATH"
+    export PATH="$PATH:~/.npm-global/bin"
+    eval "$(rbenv init -)"
+
+#   Android Dev Config
+#   ------------------------------------------------------------
+    export ANDROID_HOME=/Users/kirstenlindsmith/Library/Android/sdk
+    export ANDROID_SDK=/Users/kirstenlindsmith/Library/Android/sdk
+    export PATH=$PATH:$ANDROID_HOME/emulator
+    export PATH=$PATH:$ANDROID_HOME/tools
+    export PATH=$PATH:$ANDROID_HOME/tools/bin
+    export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+#   Opening Prompt
+#   ------------------------------------------------------------
+
+fortune | cowsay -f kitty | lolcat -p 1
+#  curl parrot.live
+
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
@@ -54,6 +74,12 @@ mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and ju
 trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
 ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
+alias cgh='open https://github.com/betterPT/clinic-webapp-k8s'          #opens clinic app
+alias pgh='open https://github.com/betterPT/patient-webapp-k8s'         #opens patient app
+alias rgh='open https://github.com/betterPT/request-management-app'     #opens RMA
+alias pdgh='open https://github.com/betterPT/patient-dashboard'         #opens patient dashboard micro app
+alias fgh='open https://github.com/betterPT/foundation'                 #opens foundation micro app
+alias bgh='open https://github.com/betterPT/badger'                     #opens badger
 
 #   lr:  Full Recursive Directory Listing
 #   ------------------------------------------
@@ -325,6 +351,7 @@ httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grab
 plugins=(git osx node git-open)
 
 source $ZSH/oh-my-zsh.sh
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="/usr/local/bin:$PATH"
 
 # User configuration
@@ -354,3 +381,5 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+
