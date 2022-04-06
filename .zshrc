@@ -7,6 +7,7 @@ export ZSH="/Users/kirstenlindsmith/.oh-my-zsh"
 export DEFAULT_USER="kirstenlindsmith"
 
 # Set theme from ~/.oh-my-zsh/themes/
+source /usr/local/opt/powerlevel9k/powerlevel9k.zsh-theme # source specified for work computer
 ZSH_THEME="powerlevel9k/powerlevel9k"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
@@ -35,7 +36,9 @@ prompt_context() {}
 
 #   Opening prompt
 #   ------------------------------------------------------------
-fortune | cowsay -f kitty | lolcat -p 1
+choices=("kitty" "dragon" "ghostbusters" "moose" "stegosaurus" "turkey" "frogs" "turtle")
+animal=${choices[$RANDOM % ${#choices[@]} ]}
+fortune -s | cowsay -f $animal | lolcat -p 1
 #  curl parrot.live
 
 
