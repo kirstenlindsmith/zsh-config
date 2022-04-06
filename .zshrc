@@ -1,21 +1,12 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# NOTE: I found this super amazing zshrc on someone else's github years ago and copied it,
+# and have since lost the link to credit the author. This is my heavily edited version of that.
 
-# Path to your oh-my-zsh installation.
+# Path to oh-my-zsh installation.
 export ZSH="/Users/kirstenlindsmith/.oh-my-zsh"
 
 export DEFAULT_USER="kirstenlindsmith"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="agnoster"
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
+# Set theme from ~/.oh-my-zsh/themes/
 ZSH_THEME="powerlevel9k/powerlevel9k"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
@@ -42,18 +33,21 @@ prompt_context() {}
     export PATH=$PATH:$ANDROID_HOME/tools/bin
     export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-#   Opening Prompt
+#   Opening prompt
 #   ------------------------------------------------------------
-
 fortune | cowsay -f kitty | lolcat -p 1
 #  curl parrot.live
 
+
+# Aliases and scripts
+#   ------------------------------------------------------------
+# ALIASES FROM THE TEMPLATE: -----------------------------------
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
 alias less='less -FSRXc'                    # Preferred 'less' implementation
-#cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
 alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
 alias ..='cd ../'                           # Go back 1 directory level
 alias ...='cd ../../'                       # Go back 2 directory levels
@@ -74,13 +68,82 @@ mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and ju
 trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
 ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
-alias cgh='open https://github.com/betterPT/clinic-webapp-k8s'          #opens clinic app
-alias pgh='open https://github.com/betterPT/patient-webapp-k8s'         #opens patient app
-alias rgh='open https://github.com/betterPT/request-management-app'     #opens RMA
-alias pdgh='open https://github.com/betterPT/patient-dashboard'         #opens patient dashboard micro app
-alias fgh='open https://github.com/betterPT/foundation'                 #opens foundation micro app
-alias bgh='open https://github.com/betterPT/badger'                     #opens badger
 
+# MY ALIASES: --------------------------------------------------
+# alias cgh='open https://github.com/betterPT/clinic-webapp-k8s'          #opens clinic app
+# alias pgh='open https://github.com/betterPT/patient-webapp-k8s'         #opens patient app
+# alias rgh='open https://github.com/betterPT/request-management-app'     #opens RMA
+# alias pdgh='open https://github.com/betterPT/patient-dashboard'         #opens patient dashboard micro app
+# alias fgh='open https://github.com/betterPT/foundation'                 #opens foundation micro app
+# alias bgh='open https://github.com/betterPT/badger'                     #opens badger
+alias shell='cd /Users/kirstenlindsmith/Documents/Code/Alloy/Daffy && pipenv shell' # starts shell for daffy backend
+alias run='pipenv run python manage.py runserver' # run daffy backend locally
+alias rundocker='cd /Users/kirstenlindsmith/Documents/Code/Alloy && export AWS_PROFILE=local && export AWS_REGION=us-east-1 && ./alloy.sh services run webhooks && docker-compose up -d postgres redis elasticsearch redis_querycache dynamodb && docker-compose up -d typhon && docker-compose up -d elmer' # the rest of docker, for when running daffy locally
+alias release='cd /Users/kirstenlindsmith/Documents/Code/Alloy && git checkout master && git pull origin master && ./alloy.sh releases cut dashboard' # cut manual release for daffy
+alias localelmer='cd /Users/kirstenlindsmith/Documents/Code/Alloy/Elmer && pipenv run python run.py -l -n -w'
+alias login='export AWS_PROFILE=local && export AWS_REGION=us-east-1 && onelogin-aws-login && cd /Users/kirstenlindsmith/Documents/Code/Alloy && ./alloy.sh util auth'
+alias tests='cd /Users/kirstenlindsmith/Documents/Code/Alloy && ./alloy.sh services run dashboard && ./alloy.sh tests run daffy'
+
+# MY SCRIPTS: --------------------------------------------------
+migrate() {
+    cd /Users/kirstenlindsmith/Documents/Code/Alloy/UncleWaldo
+    if [ -n "$2" ]
+    then
+        echo "**** npx db-migrate up:$1 -e $2 --verbose"
+        npx db-migrate up:$1 -e $2 --verbose
+    elif [ -n "$1" ]
+    then
+        echo "**** npx db-migrate up:$1 -e local --verbose"
+        npx db-migrate up:$1 -e local --verbose
+    else
+        echo "**** npx db-migrate up:alloy -e local --verbose"
+        npx db-migrate up:alloy -e local --verbose
+    fi
+}
+
+latest() {
+    cd /Users/kirstenlindsmith/Documents/Code/Alloy/
+    if [ -n "$1" ]
+    then
+        echo "**** rebuilding $1 using latest image"
+        ./alloy.sh util use-latest-image $1
+    else
+        echo "Please specify which container you want to rebuild"
+    fi
+}
+
+restart() {
+    cd /Users/kirstenlindsmith/Documents/Code/Alloy
+    if [ -n "$1" ]
+    then
+        echo "**** RUNNING: docker stop $1..."
+        docker stop $1
+        echo "**** RESTARTING: docker-compose up -d $1..."
+        docker-compose up -d $1
+        echo "**** DONE!!"
+    else
+        echo "Please specify which container you want to restart"
+    fi
+}
+
+nukedocker() {
+    cd /Users/kirstenlindsmith/Documents/Code/Alloy
+    echo '**** Shutting down docker containers...'
+    docker-compose down --remove-orphans
+    echo '**** Nuking the containers...'
+    docker kill $(docker ps -aq)
+    echo '**** Nuking docker processes...'
+    docker rm -f -v $(docker ps -aq)
+    echo '**** Nuking docker images...'
+    docker rmi -f  $(docker images -q)
+    echo '*** Nuking volumes...'
+    docker volumes purge
+    echo '**** Pruning everything just in case...'
+    docker system prune
+    echo '**** DOCKER SHOULD BE DEAD NOW :)'
+}
+
+# SCRIPTS FROM THE TEMPLATE: -----------------------------------
 #   lr:  Full Recursive Directory Listing
 #   ------------------------------------------
 alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
@@ -97,6 +160,15 @@ alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\
     showa () { /usr/bin/grep --color=always -i -a1 $@ ~/Library/init/bash/aliases.bash | grep -v '^\s*$' | less -FSRXc ; }
 
 
+# THE FOLLOWING SECTIONS ARE ALL TAKEN FROM THE ORIGINAL TEMPLATE -------
+# -------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #   -------------------------------
 #   3. FILE AND FOLDER MANAGEMENT
 #   -------------------------------
