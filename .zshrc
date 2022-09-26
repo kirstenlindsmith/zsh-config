@@ -2,13 +2,13 @@
 # and have since lost the link to credit the author. This is my heavily edited version of that.
 
 # Path to oh-my-zsh installation.
-export ZSH="/Users/kirstenlindsmith/.oh-my-zsh"
+export ZSH="/Users/kirsten/.oh-my-zsh"
 
-export DEFAULT_USER="kirstenlindsmith"
+export DEFAULT_USER="kirsten"
 
 # Set theme from ~/.oh-my-zsh/themes/
 source /usr/local/opt/powerlevel9k/powerlevel9k.zsh-theme # source specified for work computer
-ZSH_THEME="powerlevel9k/powerlevel9k"
+# ZSH_THEME="powerlevel9k/powerlevel9k"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=(2)
@@ -27,8 +27,8 @@ prompt_context() {}
 
 #   Android Dev Config
 #   ------------------------------------------------------------
-    export ANDROID_HOME=/Users/kirstenlindsmith/Library/Android/sdk
-    export ANDROID_SDK=/Users/kirstenlindsmith/Library/Android/sdk
+    export ANDROID_HOME=/Users/kirsten/Library/Android/sdk
+    export ANDROID_SDK=/Users/kirsten/Library/Android/sdk
     export PATH=$PATH:$ANDROID_HOME/emulator
     export PATH=$PATH:$ANDROID_HOME/tools
     export PATH=$PATH:$ANDROID_HOME/tools/bin
@@ -36,7 +36,7 @@ prompt_context() {}
 
 #   Opening prompt
 #   ------------------------------------------------------------
-choices=("kitty" "dragon" "ghostbusters" "moose" "stegosaurus" "turkey" "frogs" "turtle")
+choices=("kitty" "dragon" "ghostbusters" "moose" "stegosaurus" "turkey" "turtle")
 animal=${choices[$RANDOM % ${#choices[@]} ]}
 fortune -s | cowsay -f $animal | lolcat -p 1
 #  curl parrot.live
@@ -50,7 +50,7 @@ alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
 alias less='less -FSRXc'                    # Preferred 'less' implementation
-cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+cd() { builtin cd "$@"; ls -a; }               # Always list directory contents upon 'cd'
 alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
 alias ..='cd ../'                           # Go back 1 directory level
 alias ...='cd ../../'                       # Go back 2 directory levels
@@ -79,17 +79,17 @@ alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file
 # alias pdgh='open https://github.com/betterPT/patient-dashboard'         #opens patient dashboard micro app
 # alias fgh='open https://github.com/betterPT/foundation'                 #opens foundation micro app
 # alias bgh='open https://github.com/betterPT/badger'                     #opens badger
-alias shell='cd /Users/kirstenlindsmith/Documents/Code/Alloy/Daffy && pipenv shell' # starts shell for daffy backend
-alias run='pipenv run python manage.py runserver' # run daffy backend locally
-alias rundocker='cd /Users/kirstenlindsmith/Documents/Code/Alloy && export AWS_PROFILE=local && export AWS_REGION=us-east-1 && ./alloy.sh services run webhooks && docker-compose up -d postgres redis elasticsearch redis_querycache dynamodb && docker-compose up -d typhon && docker-compose up -d elmer' # the rest of docker, for when running daffy locally
-alias release='cd /Users/kirstenlindsmith/Documents/Code/Alloy && git checkout master && git pull origin master && ./alloy.sh releases cut dashboard' # cut manual release for daffy
-alias localelmer='cd /Users/kirstenlindsmith/Documents/Code/Alloy/Elmer && pipenv run python run.py -l -n -w'
-alias login='export AWS_PROFILE=local && export AWS_REGION=us-east-1 && onelogin-aws-login && cd /Users/kirstenlindsmith/Documents/Code/Alloy && ./alloy.sh util auth'
-alias tests='cd /Users/kirstenlindsmith/Documents/Code/Alloy && ./alloy.sh services run dashboard && ./alloy.sh tests run daffy'
+# alias shell='cd /Users/kirsten/Documents/Code/Alloy/Daffy && pipenv shell' # starts shell for daffy backend
+# alias run='pipenv run python manage.py runserver' # run daffy backend locally
+# alias rundocker='cd /Users/kirsten/Documents/Code/Alloy && export AWS_PROFILE=local && export AWS_REGION=us-east-1 && ./alloy.sh services run webhooks && docker-compose up -d postgres redis elasticsearch redis_querycache dynamodb && docker-compose up -d typhon && docker-compose up -d elmer' # the rest of docker, for when running daffy locally
+# alias release='cd /Users/kirsten/Documents/Code/Alloy && git checkout master && git pull origin master && ./alloy.sh releases cut dashboard' # cut manual release for daffy
+# alias localelmer='cd /Users/kirsten/Documents/Code/Alloy/Elmer && pipenv run python run.py -l -n -w'
+# alias login='export AWS_PROFILE=local && export AWS_REGION=us-east-1 && onelogin-aws-login && cd /Users/kirsten/Documents/Code/Alloy && ./alloy.sh util auth'
+# alias tests='cd /Users/kirsten/Documents/Code/Alloy && ./alloy.sh services run dashboard && ./alloy.sh tests run daffy'
 
 # MY SCRIPTS: --------------------------------------------------
 migrate() {
-    cd /Users/kirstenlindsmith/Documents/Code/Alloy/UncleWaldo
+    cd /Users/kirsten/Documents/Code/Alloy/UncleWaldo
     if [ -n "$2" ]
     then
         echo "**** npx db-migrate up:$1 -e $2 --verbose"
@@ -105,7 +105,7 @@ migrate() {
 }
 
 latest() {
-    cd /Users/kirstenlindsmith/Documents/Code/Alloy/
+    cd /Users/kirsten/Documents/Code/Alloy/
     if [ -n "$1" ]
     then
         echo "**** rebuilding $1 using latest image"
@@ -116,7 +116,7 @@ latest() {
 }
 
 restart() {
-    cd /Users/kirstenlindsmith/Documents/Code/Alloy
+    cd /Users/kirsten/Documents/Code/Alloy
     if [ -n "$1" ]
     then
         echo "**** RUNNING: docker stop $1..."
@@ -130,7 +130,7 @@ restart() {
 }
 
 nukedocker() {
-    cd /Users/kirstenlindsmith/Documents/Code/Alloy
+    cd /Users/kirsten/Documents/Code/Alloy
     echo '**** Shutting down docker containers...'
     docker-compose down --remove-orphans
     echo '**** Nuking the containers...'
@@ -423,7 +423,8 @@ httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grab
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx node git-open)
+plugins=(git node brew z)
+. ~/z.sh
 
 source $ZSH/oh-my-zsh.sh
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -457,4 +458,3 @@ fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
-
