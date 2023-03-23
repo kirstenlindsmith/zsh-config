@@ -2,13 +2,13 @@
 # and have since lost the link to credit the author. This is my heavily edited version of that.
 
 # Path to oh-my-zsh installation.
-export ZSH="/Users/kirsten/.oh-my-zsh"
+export ZSH="/Users/kirstenlindsmith/.oh-my-zsh"
 
-export DEFAULT_USER="kirsten"
+export DEFAULT_USER="kirstenlindsmith"
 
-# Set theme from ~/.oh-my-zsh/themes/
-source /usr/local/opt/powerlevel9k/powerlevel9k.zsh-theme # source specified for work computer
-# ZSH_THEME="powerlevel9k/powerlevel9k"
+# source /usr/local/opt/powerlevel9k/powerlevel9k.zsh-theme # source specified if not using OMZ
+# Set theme from ~/.oh-my-zsh/custom/themes/ vvvvvv
+ZSH_THEME="powerlevel9k/powerlevel9k"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=(2)
@@ -36,8 +36,9 @@ prompt_context() {}
 
 #   Opening prompt
 #   ------------------------------------------------------------
-choices=("kitty" "dragon" "ghostbusters" "moose" "stegosaurus" "turkey" "turtle")
-animal=${choices[$RANDOM % ${#choices[@]} ]}
+#
+choices=("kitty" "dragon" "ghostbusters" "stegosaurus" "moose" "turkey")
+animal=${choices[$(($RANDOM % ${#choices[@]} +1 ))]}
 fortune -s | cowsay -f $animal | lolcat -p 1
 #  curl parrot.live
 
@@ -71,6 +72,7 @@ mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and ju
 trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
 ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
+alias ngrok="~/ngrok"                       # ngrok:        Start ngrok tunneling service (e.g., `ngrok http 3000`)
 
 # MY ALIASES: --------------------------------------------------
 # alias cgh='open https://github.com/betterPT/clinic-webapp-k8s'          #opens clinic app
@@ -423,11 +425,13 @@ httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grab
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git node brew z)
-. ~/z.sh
+plugins=(git node brew z zsh-z zsh-syntax-highlighting)
+# . ~/z.sh # for if z is installed locally
 
 source $ZSH/oh-my-zsh.sh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zprofile
+source ~/.nvm/nvm.sh
+# source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="/usr/local/bin:$PATH"
 
 # User configuration
@@ -457,4 +461,7 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export PATH="$HOME/.rbenv/bin:$PATH"
+# export PATH="$HOME/.rbenv/bin:$PATH"source /Users/kirstenlindsmith/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
